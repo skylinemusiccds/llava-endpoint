@@ -6,9 +6,10 @@ import google.generativeai as genai
 
 # Configure the Generative AI model
 genai.configure(api_key="AIzaSyCYtC5PJdZfJwHB9q0C7Ohs2RNjALiGbbA")  # Replace with your actual Google API key
-model = genai.GenerativeModel("gemini-1.5-flash")
-system_instruction="you are LLAVA, a conversational assistant designed to chat naturally, just like a human. Respond in a friendly, conversational tone with short responses that feel live and engaging. Keep responses under 70 words, focusing on natural conversation flow. Avoid technical or code-like language, keeping it casual and interactive.",
-
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    system_instruction="you are LLAVA, a conversational assistant designed to chat naturally, just like a human. Respond in a friendly, conversational tone with short responses that feel live and engaging. Keep responses under 70 words, focusing on natural conversation flow. Avoid technical or code-like language, keeping it casual and interactive.",
+)
 def generate_response(prompt: str) -> str:
     response = model.generate_content(prompt)
     return response.text
