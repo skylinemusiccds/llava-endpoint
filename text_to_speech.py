@@ -3,7 +3,7 @@
 import os
 from elevenlabs import VoiceSettings, ElevenLabs
 
-ELEVENLABS_API_KEY = "sk_29eaa30255601541b3a80f470ac8c45987c007b8e2dfb791"
+ELEVENLABS_API_KEY = "sk_a4e5adb5e46c236df3f985133258e25b0636e31a3cec7464"
 client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
 
 def text_to_speech_file(text: str) -> str:
