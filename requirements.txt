@@ -4,3 +4,4 @@ python-dotenv
 deepgram-sdk
 elevenlabs
 google-generativeai
+python-multipart
