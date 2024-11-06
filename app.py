@@ -1,10 +1,11 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse
 from speech_to_text import transcribe_audio
 from text_to_speech import text_to_speech_file
 import google.generativeai as genai
 import os
 import logging
+import asyncio
 
 # Initialize FastAPI application
 app = FastAPI()
@@ -70,11 +71,22 @@ async def process_audio(file: UploadFile = File(...)):
             logging.warning("No transcript generated.")
             raise HTTPException(status_code=400, detail="No transcript available.")
 
-        # Return the generated audio file as a response
-        return FileResponse(audio_output, media_type='audio/wav', filename=os.path.basename(audio_output))
+        # Define a generator to stream the audio file in chunks
+        async def audio_streamer(file_path: str):
+            try:
+                with open(file_path, "rb") as audio_file:
+                    while chunk := audio_file.read(1024):  # Adjust chunk size if needed
+                        yield chunk
+                    await asyncio.sleep(1)  # Ensure the final chunk is sent
+            finally:
+                os.remove(file_path)  # Delete audio file after playback is done
+                logging.info("Deleted audio file after streaming: %s", file_path)
+
+        # Return the generated audio file as a streaming response
+        return StreamingResponse(audio_streamer(audio_output), media_type='audio/wav')
 
     except Exception as e:
         logging.error("Error processing audio: %s", e)
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-# You can add additional endpoints or functionality as needed
+# Additional endpoints or functionalities can be added as needed
