@@ -15,6 +15,10 @@ model = genai.GenerativeModel("gemini-1.5-flash")
 # Temporary file location for storing the TTS response
 TEMP_AUDIO_FILE = "response_audio.wav"
 
+@app.get("/")
+async def root():
+    return {"message": "Endpoint API is running!"}
+
 @app.post("/process-audio/")
 async def process_audio(file: UploadFile = File(...)):
     file_location = f"temp_{file.filename}"
