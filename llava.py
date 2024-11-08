@@ -30,4 +30,4 @@ def main(audio_file: str):
 
 if __name__ == "__main__":
     # Replace with the path to your audio file
-    main("output.wav")
+    main("input.wav")
